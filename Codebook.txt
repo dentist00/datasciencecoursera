@@ -1,0 +1,38 @@
+Feature Selection 
+=================
+
+The features in "tidydata" remains the mean and std values form the UCI HAR Dataset
+
+tBodyAccXYZ
+tGravityAccXYZ
+tBodyAccJerkXYZ
+tBodyGyroXYZ
+tBodyGyroJerkXYZ
+tBodyAccMag
+tGravityAccMag
+tBodyAccJerkMag
+tBodyGyroMag
+tBodyGyroJerkMag
+fBodyAccXYZ
+fBodyAccJerkXYZ
+fBodyGyroXYZ
+fBodyAccMag
+fBodyAccJerkMag
+fBodyGyroMag
+fBodyGyroJerkMag
+
+The set of variables that were estimated from these signals are: 
+
+mean(): Mean value
+std(): Standard deviation
+angle(): Angle between to vectors.
+
+Additional vectors obtained by averaging the signals in a signal window sample. These are used on the angle() variable:
+
+gravityMean
+tBodyAccMean
+tBodyAccJerkMean
+tBodyGyroMean
+tBodyGyroJerkMean
+
+The complete list of variables of each feature vector is available in 'tidydata.txt'
