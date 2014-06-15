@@ -1,0 +1,82 @@
+Reproducible Research: Peer Assessment 1
+========================================================
+
+## Loading and preprocessing the data
+```{r readData,echo=TRUE}
+activityData <- read.csv("activity.csv",head = T)
+head(activityData,3)
+```
+
+## What is mean total number of steps taken per day?
+```{r totalStep,echo=TRUE}
+activityPerDay <- split(activityData,activityData$date)
+stepsPerDay <- sapply(activityPerDay, function(x) sum(x[,c("steps")], na.rm = T))
+hist(stepsPerDay)
+
+meanStep <- mean(stepsPerDay)
+medianStep <-  median(stepsPerDay)
+
+```
+ - The mean total number of steps taken per day is `r meanStep`
+ - The medianStep total number of steps taken per day is `r medianStep`
+
+
+## What is the average daily activity pattern?
+```{r meanStepsPerInterval,echo=TRUE}
+stepByInterval <- split(activityData,activityData$interval)
+averageSteps <- sapply(stepByInterval , function(x) mean(x[,c("steps")], na.rm = T))
+
+interval <- activityData$interval[1:288]
+
+maxSteps <- max(averageSteps)
+which.max(averageSteps)
+intervalMax <- interval[which.max(averageSteps)]
+
+plot(interval,averageSteps,type = "l",xlab = "Interval",ylab = "Number of steps")
+
+```
+
+ - The `r intervalMax` 5-minute interval, on average contains the maximum number of steps
+
+## Imputing missing values
+```{r missingValues}
+missNum <- sum(is.na(activityData))
+filledData <- activityData
+filledData[is.na(filledData)] <- 0
+
+stepsPerDay1 <- sapply(split(filledData,filledData$date), function(x) sum(x[,c("steps")], na.rm = T))
+hist(stepsPerDay1)
+
+meanStep1 <- mean(stepsPerDay1)
+medianStep1 <-  median(stepsPerDay1)
+
+```
+
+ - The mean total number of steps taken per day after "NA" is replaced by "0" is `r meanStep1`
+ - The medianStep total number of steps taken per day after "NA" is replaced by "0" is `r medianStep1`
+
+
+## Are there differences in activity patterns between weekdays and weekends?
+```{r weekdays,echo=TRUE}
+Sys.setlocale("LC_TIME", "English")
+week <- as.Date(as.character(filledData$date))
+week <- sapply(week, weekdays)
+weekData <- cbind(filledData,week)
+
+weekday <- weekData[weekData$week %in% c("Monday","Tuesday","Wednesday","Thursday","Friday"),]
+weekend <- weekData[weekData$week %in% c("Saturday","Sunday"),]
+
+head(weekday,3)
+head(weekend,3)
+
+weekdaySteps<- sapply(split(weekday,weekday$interval), function(x) mean(x[,c("steps")], na.rm = T))
+weekendSteps<- sapply(split(weekend,weekend$interval), function(x) mean(x[,c("steps")], na.rm = T))
+
+head(weekdaySteps,3)
+head(weekendSteps,3)
+
+par(mfrow = c(2,1))
+plot(interval,weekdaySteps,type = "l",xlab = "Interval",ylab = "Number of steps",main = "Weekday")
+plot(interval,weekendSteps,type = "l",xlab = "Interval",ylab = "Number of steps",main = "Weekend")
+
+```
